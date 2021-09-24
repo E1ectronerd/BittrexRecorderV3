@@ -21,11 +21,16 @@ def get_ticker(market):
     # }
     reqUrl = 'https://api.bittrex.com/v3/markets/{marketSymbol}/ticker'
     reqUrl = reqUrl.format(marketSymbol = market)
-    raw_dict = requests.get(reqUrl).json()
-    if 'symbol' in raw_dict:
-        return True, raw_dict
-    else:
-        return False, raw_dict
+
+    try:
+        raw_dict = requests.get(reqUrl).json()
+        if 'symbol' in raw_dict:
+            return True, raw_dict
+        else:
+            return False, raw_dict
+    except requests.ConnectionError:
+        print("Connection Error: get_ticker")
+        return False, {}
 
 # get 24 hr rolling average for market
 def get_dailySummary(market):
@@ -42,11 +47,16 @@ def get_dailySummary(market):
 
     reqUrl = 'https://api.bittrex.com/v3/markets/{marketSymbol}/summary'
     reqUrl = reqUrl.format(marketSymbol=market)
-    raw_dict = requests.get(reqUrl).json()
-    if 'symbol' in raw_dict:
-        return True, raw_dict
-    else:
-        return False, raw_dict
+
+    try:
+        raw_dict = requests.get(reqUrl).json()
+        if 'symbol' in raw_dict:
+            return True, raw_dict
+        else:
+            return False, raw_dict
+    except requests.ConnectionError:
+        print("Connection Error: get_dailySummary")
+        return False, {}
 
 # Returns all available markets
 #
