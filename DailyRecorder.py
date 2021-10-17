@@ -2,7 +2,7 @@
 # this program was intended to scrape crypto prices for use in machine learning
 
 import csv
-import json
+import datetime
 import time
 import os.path
 from datetime import datetime
@@ -132,7 +132,7 @@ def WriteDailyFile( path ):
         lineWriter.writerow(header) 
         
         while cntr > 0 :  # one day timer here
-            start = time.time()
+            start = datetime.now()
             
             GetCoinListData()
             lineWriter.writerow(tempCoinListData)        
@@ -140,8 +140,18 @@ def WriteDailyFile( path ):
             #print(tempCoinListData)
             del tempCoinListData [:]
             cntr -= 1
-            procTime = time.time()
-            time.sleep(60 - (procTime - start))
+            procTime = datetime.now()
+
+            exec_time = procTime - start
+
+            try:
+                time.sleep(60 - exec_time.total_seconds())
+
+            except Exception:
+                time.sleep(60)
+                print(Exception)
+                print("time Calc Error: ", "exec_time: ", exec_time, " start: ", start)
+
             
         csvfile.close
         
