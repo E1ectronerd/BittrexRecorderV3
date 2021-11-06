@@ -42,14 +42,47 @@ def getCoinSummary(coin):
     summaryBool, json_summary = BittrexAPIv3.get_dailySummary(coin)
 
     if (tickerBool == True) and (summaryBool == True):
-        High = json_summary['high']
-        Low = json_summary['low']
-        Volume = json_summary['volume']
-        PriceLast = json_ticker['lastTradeRate']
-        BaseVolume = json_summary['quoteVolume']
-        time = json_summary['updatedAt']
-        PriceAsk = json_ticker['askRate']
-        PriceBid = json_ticker['bidRate']
+
+        if 'high' in json_summary:
+            High = json_summary['high']
+        else:
+            High = '-1'
+
+        if 'low' in json_summary:
+            Low = json_summary['low']
+        else:
+            Low = '-1'
+
+        if 'volume' in json_summary:
+            Volume = json_summary['volume']
+        else:
+            Volume = '-1'
+
+        if 'lastTradeRate' in json_ticker:
+            PriceLast = json_ticker['lastTradeRate']
+        else:
+            PriceLast = '-1'
+
+        if 'quoteVolume' in json_summary:
+            BaseVolume = json_summary['quoteVolume']
+        else:
+            BaseVolume = '-1'
+
+        if 'updatedAt' in json_summary:
+            time = json_summary['updatedAt']
+        else:
+            time = '-1'
+
+        if 'askRate' in json_ticker:
+            PriceAsk = json_ticker['askRate']
+        else:
+            PriceAsk = '-1'
+
+        if 'bidRate' in json_ticker:
+            PriceBid = json_ticker['bidRate']
+        else:
+            PriceBid = '-1'
+
         PrevDay = '-1'
         tempSingleCoinData.append(time)
         tempSingleCoinData.append(High)
@@ -65,11 +98,25 @@ def getCoinSummary(coin):
         High = '-1'
         Low = '-1'
         Volume = '-1'
-        PriceLast = json_ticker['lastTradeRate']
+
+        if 'lastTradeRate' in json_ticker:
+            PriceLast = json_ticker['lastTradeRate']
+        else:
+            PriceLast = '-1'
+
         BaseVolume = '-1'
         time = '-1'
-        PriceAsk = json_ticker['askRate']
-        PriceBid = json_ticker['bidRate']
+
+        if 'askRate' in json_ticker:
+            PriceAsk = json_ticker['askRate']
+        else:
+            PriceAsk = '-1'
+
+        if 'bidRate' in json_ticker:
+            PriceBid = json_ticker['bidRate']
+        else:
+            PriceBid = '-1'
+
         PrevDay = '-1'
         tempSingleCoinData.append(time)
         tempSingleCoinData.append(High)
@@ -133,7 +180,6 @@ def WriteDailyFile( path ):
         
         while cntr > 0 :  # one day timer here
             start = datetime.now()
-            
             GetCoinListData()
             lineWriter.writerow(tempCoinListData)        
             csvfile.flush()
